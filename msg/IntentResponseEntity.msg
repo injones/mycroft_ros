@@ -1,0 +1,2 @@
+string entity
+string value
