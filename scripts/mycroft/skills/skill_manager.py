@@ -372,7 +372,6 @@ class SkillManager(Thread):
 
         self.remove_git_locks()
         self._connected_event.wait()
-        LOG.info('What is happening')
         has_loaded = False
 
         # check if skill updates are enabled
