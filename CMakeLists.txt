@@ -122,7 +122,7 @@ catkin_package(
 catkin_generate_virtualenv(
   PYTHON_VERSION 3.7
   # Choose not to use underlying system packages. This excludes any python packages installed by apt or system-pip from the environment.
-  USE_SYSTEM_PACKAGES FALSE  # Default TRUE
+  USE_SYSTEM_PACKAGES TRUE  # Default TRUE
 
   # Disable including pip requirements from catkin dependencies of this package.
   ISOLATE_REQUIREMENTS TRUE  # Default FALSE
@@ -216,7 +216,7 @@ install(FILES requirements.txt
 
 catkin_install_python(
   PROGRAMS
-    scripts/do_python_things.py
+    scripts/message_bus.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 #############
