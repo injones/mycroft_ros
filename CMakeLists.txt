@@ -216,7 +216,8 @@ install(FILES requirements.txt
 
 catkin_install_python(
   PROGRAMS
-    scripts/message_bus.py
+    scripts/mycroft_message_bus.py
+    scripts/mycroft_skills.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 #############
