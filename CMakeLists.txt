@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   actionlib_msgs
   actionlib
+  catkin_virtualenv
 )
 
 ## System dependencies are found with CMake's conventions
@@ -112,11 +113,27 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES mycroft_test
+#  LIBRARIES mycroft_ros
 #  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
 #  DEPENDS system_lib
   CATKIN_DEPENDS message_runtime
 )
+
+catkin_generate_virtualenv(
+  PYTHON_VERSION 3.7
+  # Choose not to use underlying system packages. This excludes any python packages installed by apt or system-pip from the environment.
+  USE_SYSTEM_PACKAGES FALSE  # Default TRUE
+
+  # Disable including pip requirements from catkin dependencies of this package.
+  ISOLATE_REQUIREMENTS TRUE  # Default FALSE
+
+  # Provide extra arguments to the underlying pip invocation
+  EXTRA_PIP_ARGS
+    --no-binary=:all:
+    -vvv
+    -r /home/vagrant/dev/catkin_ws/src/mycroft_ros/requirements.txt
+)
+
 
 ###########
 ## Build ##
@@ -193,6 +210,14 @@ include_directories(
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+
+install(FILES requirements.txt
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+catkin_install_python(
+  PROGRAMS
+    scripts/do_python_things.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 #############
 ## Testing ##
