@@ -193,6 +193,18 @@ def register_intents(instance, skill_topic, intent_files=None, entities=None, in
         for entity in entities:
             instance.register_entity_file(entity)
 
+def handle_remove_skill(data):
+    """
+        Removes the skill using its path.
+        Arguements:
+            data (String): Skill directory path
+    """
+    global bus, skill_manager
+    skill_path = data.data
+    skill = skill_manager.loaded_skills.get(skill_path, {})
+    # set is_ros_node to False to let the SkillManager handle skill removal
+    skill["is_ros_node"] = False
+
 def handle_register_skill(data):
     global bus, skill_manager
     mycroft_skill = data.skill
@@ -383,6 +395,7 @@ def listener():
     rospy.Subscriber("mycroft/speak", String, handle_speak)
     #rospy.Subscriber("mycroft/response", GetResponse, handle_get_response)
     rospy.Subscriber("mycroft/utterance", String, handle_utterance)
+    rospy.Subscriber("mycroft/remove_skill", String, handle_remove_skill)
     s = rospy.Service('mycroft/register_skill', MycroftService, handle_register_skill)
     
     global bus
