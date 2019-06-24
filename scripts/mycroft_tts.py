@@ -21,6 +21,7 @@ import rospy
 from std_msgs.msg import String
 from mycroft.configuration import Configuration
 from mycroft.messagebus.client.ws import WebsocketClient
+from mycroft.messagebus.message import Message
 from mycroft.util import reset_sigint_handler, wait_for_exit_signal, \
     create_daemon, create_echo_function, check_for_signal
 from mycroft.util.log import LOG
@@ -44,6 +45,7 @@ def main():
     rospy.Subscriber("mycroft/speak", String, handle_speak)
     rospy.Subscriber("mycroft/stop", String, handle_stop)
     """ Main function. Run when file is invoked. """
+    global bus
     reset_sigint_handler()
     check_for_signal("isSpeaking")
     bus = WebsocketClient()  # Connect to the Mycroft Messagebus
