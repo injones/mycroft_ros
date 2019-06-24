@@ -1,5 +1,5 @@
 # mycroft_ros
-This package provides the capability to run the Text-To-Speech, Speech-To-Text and Skill functionality of Mycroft AI as ROS nodes providing topics, services and actions for communication.
+This package provides capability to run the Text-To-Speech, Speech-To-Text and Skill functionality of Mycroft AI as ROS nodes providing topics, services and actions for communication.
 
 The package makes use of the catkin_virtualenv library to run each node within a seperate Python virtual environment
 ## Installation
