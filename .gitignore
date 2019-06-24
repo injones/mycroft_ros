@@ -22,4 +22,6 @@ doc/_build/
 .installed
 .mypy_cache
 .vscode
-__pycache__/
+**/__pycache__
+skills/
+
