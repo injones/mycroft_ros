@@ -37,6 +37,7 @@ topic_name = "checking"
 connect_to_mycroft_backend = False
 get_response_server = None
 ask_yesno_server = None
+utterance_pub = rospy.Publisher("mycroft/speech", String, queue_size=10)
 
 # Remember "now" at startup.  Used to detect clock changes.
 start_ticks = time.monotonic()
@@ -175,11 +176,6 @@ def intent_callback():
 def handle_utterance(data):
     global bus
     bus.emit(Message("recognizer_loop:utterance", {'utterances': [data.data], 'lang': "en-us"}))
-
-def handle_speak(data):
-    global bus
-    print(data.data)
-    bus.emit(Message('speak', {'utterance': data.data}))
 
 def register_intents(instance, skill_topic, intent_files=None, entities=None, intents=None):
     pub = rospy.Publisher(skill_topic, IntentResponse, queue_size=10)
@@ -392,7 +388,6 @@ def listener():
     rospy.init_node('mycroft_skills')
     rospy.loginfo(rospy.get_caller_id() + " started")
     #rospy.Subscriber("mycroft/register_node", Mycroft, mycroft_register_node)
-    rospy.Subscriber("mycroft/speak", String, handle_speak)
     #rospy.Subscriber("mycroft/response", GetResponse, handle_get_response)
     rospy.Subscriber("mycroft/utterance", String, handle_utterance)
     rospy.Subscriber("mycroft/remove_skill", String, handle_remove_skill)
@@ -415,6 +410,7 @@ def listener():
     bus.once('open', _starting_up)
     #bus.on('mycroft.skills.loaded', check_working)
     bus.on('skill.converse.request', check_working)
+    #bus.on('utterance', lambda m : utterance_pub.publish(m["utterance"]))
 
     create_daemon(bus.run_forever)
     wait_for_exit_signal()

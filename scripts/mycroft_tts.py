@@ -28,10 +28,21 @@ from mycroft.util.log import LOG
 import mycroft.audio.speech as speech
 from mycroft.audio.audioservice import AudioService
 
+bus = None
+
+def handle_speak(data):
+    global bus
+    bus.emit(Message('speak', {'utterance': data.data}))
+
+def handle_stop(data):
+    global bus
+    bus.emit(Message('mycroft.stop'))
 
 def main():
     rospy.init_node('mycroft_tts')
     rospy.loginfo(rospy.get_caller_id() + " started")
+    rospy.Subscriber("mycroft/speak", String, handle_speak)
+    rospy.Subscriber("mycroft/stop", String, handle_stop)
     """ Main function. Run when file is invoked. """
     reset_sigint_handler()
     check_for_signal("isSpeaking")
@@ -48,6 +59,7 @@ def main():
 
     speech.shutdown()
     audio.shutdown()
+    # keep node running
     rospy.spin()
 
 
