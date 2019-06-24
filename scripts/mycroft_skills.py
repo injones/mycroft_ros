@@ -178,6 +178,7 @@ def handle_utterance(data):
 
 def handle_speak(data):
     global bus
+    print(data.data)
     bus.emit(Message('speak', {'utterance': data.data}))
 
 def register_intents(instance, skill_topic, intent_files=None, entities=None, intents=None):

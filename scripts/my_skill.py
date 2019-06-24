@@ -5,6 +5,7 @@ from mycroft_ros.srv import *
 from std_msgs.msg import String
 import actionlib
 from mycroft_helpers.mycroft_skill import *
+from mycroft_ros.helpers import IntentBuilder as Build
 
 path = "/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/tester"
 
