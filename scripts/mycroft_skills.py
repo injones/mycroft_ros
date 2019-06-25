@@ -34,10 +34,9 @@ bus = None  # Mycroft messagebus reference, see "mycroft.messagebus"
 event_scheduler = None
 skill_manager = None
 topic_name = "checking"
-connect_to_mycroft_backend = False
+connect_to_mycroft_backend = True
 get_response_server = None
 ask_yesno_server = None
-utterance_pub = rospy.Publisher("mycroft/speech", String, queue_size=10)
 
 # Remember "now" at startup.  Used to detect clock changes.
 start_ticks = time.monotonic()
@@ -102,7 +101,7 @@ def _starting_up():
         - adapt intent service
         - padatious intent service
     """
-    global bus, skill_manager, event_scheduler
+    global bus, skill_manager, event_scheduler, connect_to_mycroft_backend
 
     bus.on('intent_failure', FallbackSkill.make_intent_failure_handler(bus))
 
@@ -136,13 +135,10 @@ def _starting_up():
     skill_manager.load_priority()
     skill_manager.start()
     bus.emit(Message('skill.manager.initialised'))
-    check_connection_without_backend()
-    #LOG.info(self.connect_to_mycroft_backend)
-    #if self.connect_to_mycroft_backend:
-    #    LOG.info('without mycroft backend')
-    #    check_connection()
-    #else:
-    #    check_connection_without_backend()
+    if connect_to_mycroft_backend:
+       check_connection()
+    else:
+       check_connection_without_backend()
 
 def shutdown():
     if event_scheduler:
@@ -169,9 +165,6 @@ def check_connection_without_backend():
     if connected():
         LOG.info('here')
         bus.emit(Message('mycroft.internet.connected'))
-
-def intent_callback():
-    rospy.loginfo('logged')
 
 def handle_utterance(data):
     global bus
@@ -410,7 +403,6 @@ def listener():
     bus.once('open', _starting_up)
     #bus.on('mycroft.skills.loaded', check_working)
     bus.on('skill.converse.request', check_working)
-    #bus.on('utterance', lambda m : utterance_pub.publish(m["utterance"]))
 
     create_daemon(bus.run_forever)
     wait_for_exit_signal()

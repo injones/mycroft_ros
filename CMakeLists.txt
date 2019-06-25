@@ -60,6 +60,7 @@ add_message_files(
   IntentResponse.msg
   #GetResponse.msg
   Mycroft.msg
+  Speech.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -219,6 +220,7 @@ catkin_install_python(
     scripts/mycroft_message_bus.py
     scripts/mycroft_skills.py
     scripts/mycroft_tts.py
+    scripts/mycroft_stt.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 #############

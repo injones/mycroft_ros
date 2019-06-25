@@ -13,6 +13,8 @@
 # limitations under the License.
 #
 from threading import Lock
+import rospy
+from mycroft_ros.msg import Speech
 
 from mycroft import dialog
 from mycroft.enclosure.api import EnclosureAPI
@@ -30,6 +32,7 @@ bus = None  # Mycroft messagebus connection
 lock = Lock()
 loop = None
 config = None
+speech_pub = rospy.Publisher("mycroft/speech", Speech, queue_size=10)
 
 
 def handle_record_begin():
@@ -65,6 +68,7 @@ def handle_utterance(event):
         ident = event.pop('ident')
         context['ident'] = ident
     bus.emit(Message('recognizer_loop:utterance', event, context))
+    speech_pub.publish(Speech(event["utterances"]))
 
 
 def handle_unknown():
@@ -143,6 +147,8 @@ def handle_open():
 
 
 def main():
+    rospy.init_node('mycroft_stt')
+    rospy.loginfo(rospy.get_caller_id() + " started")
     global bus
     global loop
     global config
@@ -180,6 +186,7 @@ def main():
     create_daemon(loop.run)
 
     wait_for_exit_signal()
+    rospy.spin()
 
 
 if __name__ == "__main__":
