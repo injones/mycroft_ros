@@ -173,10 +173,10 @@ def register_intents(instance, skill_topic, intent_files=None, entities=None, in
     pub = rospy.Publisher(skill_topic, IntentResponse, queue_size=10)
     if intent_files:
         for intent_file in intent_files:
-            instance.register_intent_file(intent_file, lambda m : pub.publish(IntentResponse(re.sub(r'[\.:](intent)?', '', m.type), m.data['utterance'], [Entity(entity, value) for entity, value in m.data.items() if entity != 'utterance'])))
+            instance.register_intent_file(intent_file, lambda m : pub.publish(IntentResponse(m.type, m.data['utterance'], [Entity(entity, value) for entity, value in m.data.items() if entity != 'utterance'])))
     if intents:
         for intent in intents:
-            instance.register_intent(Intent(name=intent.name, requires=[(req.entity, req.attribute_name) if req.attribute_name != '' else (req.entity, req.entity) for req in intent.requires], at_least_one=intent.at_least_one, optional=[(opt.entity, opt.attribute_name) if opt.attribute_name != '' else (opt.entity, opt.entity) for opt in intent.optional]), lambda m : pub.publish(IntentResponse(m.data['intent_type'].replace(':', ''), m.data['utterance'], [Entity(entity, value) for entity, value in m.data.items() if entity not in ('intent_type', 'target', 'confidence', '__tags__', 'utterance')])))
+            instance.register_intent(Intent(name=intent.name, requires=[(req.entity, req.attribute_name) if req.attribute_name != '' else (req.entity, req.entity) for req in intent.requires], at_least_one=intent.at_least_one, optional=[(opt.entity, opt.attribute_name) if opt.attribute_name != '' else (opt.entity, opt.entity) for opt in intent.optional]), lambda m : pub.publish(IntentResponse(m.data['intent_type'], m.data['utterance'], [Entity(entity, value) for entity, value in m.data.items() if entity not in ('intent_type', 'target', 'confidence', '__tags__', 'utterance')])))
     if entities:
         for entity in entities:
             instance.register_entity_file(entity)

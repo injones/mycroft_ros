@@ -11,4 +11,4 @@ Mycroft can be configured as normal using the mycroft.conf
 * add context to Skills
 * add speak_dialog
 * add Skill events / repeating events
-* add support for Streamlabs TTS?
+* error handling for skills

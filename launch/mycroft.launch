@@ -1,6 +1,6 @@
 <launch>
-  <node name="mycroft_message_bus" pkg="mycroft_ros" type="mycroft_message_bus" respawn="true" />
-  <node name="mycroft_tts" pkg="mycroft_ros" type="mycroft_tts" respawn="true" />
-  <node name="mycroft_skills" pkg="mycroft_ros" type="mycroft_skills" respawn="true" />
-  <node name="mycroft_stt" pkg="mycroft_ros" type="mycroft_stt" respawn="true" />
+  <node name="mycroft_message_bus" pkg="mycroft_ros" type="mycroft_message_bus.py" respawn="true" output="screen" />
+  <node name="mycroft_tts" pkg="mycroft_ros" type="mycroft_tts.py" respawn="true" output="screen" />
+  <node name="mycroft_skills" pkg="mycroft_ros" type="mycroft_skills.py" respawn="true" output="screen" />
+  <node name="mycroft_stt" pkg="mycroft_ros" type="mycroft_stt.py" respawn="true" output="screen" />
 </launch>
