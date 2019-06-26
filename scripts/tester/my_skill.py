@@ -10,11 +10,14 @@ path = "/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/tester"
 
 def mycroft_ros_callback(message):
     print('hello')
+    user_response = get_response(skill_path=path, dialog='can you say something to me?')
+    rospy.loginfo(user_response)
 
 def main():
     rospy.init_node('mycroft_skill_test')
     rospy.loginfo(rospy.get_caller_id() + " started")
-    manager = IntentManager().register_callback('testerMycroftRos', mycroft_ros_callback)
+    manager = IntentManager().register_callback('testerMycroftRos', mycroft_ros_callback) \
+       .register_callback('testermytest', mycroft_ros_callback)
     rospy.Subscriber('mycroft/tester', IntentResponse, manager.handle_intent)
     my_intent = IntentBuilder("MycroftRos").require("mycroft").require("ros").build()
     initialised = SkillBuilder(path).intent(my_intent).intent_file("mytest.intent") \
