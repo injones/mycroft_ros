@@ -163,7 +163,6 @@ def try_update_system(platform):
 
 def check_connection_without_backend():
     if connected():
-        LOG.info('here')
         bus.emit(Message('mycroft.internet.connected'))
 
 def handle_utterance(data):
@@ -195,6 +194,12 @@ def handle_remove_skill(data):
     skill["is_ros_node"] = False
 
 def handle_register_skill(data):
+    """ Create new MycroftSkill for ROS node and load into SkillManager
+
+    Arguements:
+        data: mycroft/register_skill service payload containing MycroftSkill srv
+
+    """
     global bus, skill_manager
     mycroft_skill = data.skill
     skill_path = mycroft_skill.path.rstrip('/')
@@ -222,68 +227,6 @@ def handle_register_skill(data):
     else:
          bus.emit(Message('mycroft.skills.loading_failure', {'path': skill_path, 'id': skill['id']}))
          return MycroftSkillResponse(False)
-
-def mycroft_register_node(data):
-    """ Create new MycroftSkill for ROS node and load into SkillManager
-
-    Args:
-        data: mycroft/register_node topic payload containing Mycroft msg
-
-    """
-    global bus, skill_manager
-    skill_path = data.path.rstrip('/')
-    skill_id = basename(skill_path)
-    skill = skill_manager.loaded_skills.setdefault(skill_path, {})
-    skill.update({"id": skill_id, "path": skill_path})
-    skill["loaded"] = True
-    skill["is_ros_node"] = True
-    instance = MycroftSkill(name=skill_id)
-    instance.bind(bus)
-    try:
-        instance.load_data_files(skill_path)
-        skill_topic = 'mycroft/' + skill_id
-        register_intents(instance, data.intents, skill_topic)
-        instance.initialize()
-    except Exception as e:
-        instance.default_shutdown()
-        raise e
-    skill["instance"] = instance
-    modified = 0
-    if skill['instance'] is not None:
-        bus.emit(Message('mycroft.skills.loaded', {'path': skill_path, 'id': skill['id'], 'name': skill['instance'].name, 'modified': modified}))
-        return
-    else:
-         bus.emit(Message('mycroft.skills.loading_failure', {'path': skill_path, 'id': skill['id']}))
-
-def ros_skill(data):
-    global skill_manager, bus
-    skill_path = '/home/vagrant/dev/catkin_ws/src/mycroft_test/scripts/tester'
-    skill = skill_manager.loaded_skills.setdefault('tester', {})
-    skill.update({"id": 'tester', "path": '/home/vagrant/dev/catkin_ws/src/mycroft_test/scripts/tester'})
-    skill["loaded"] = True
-    skill["is_ros_node"] = True
-    instance = MycroftSkill(name='tester')
-    instance.bind(bus)
-    try:
-        instance.load_data_files('/home/vagrant/dev/catkin_ws/src/mycroft_test/scripts/tester')
-        # Set up intent handlers
-        #instance._register_decorated()
-        #instance.register_intent(IntentBuilder("TesterSkill").require("tests"), intent_callback)
-        instance.register_intent(IntentBuilder("TesterSkill").require("tests"), lambda m : rospy.loginfo("logged"))
-        #instance.register_resting_screen()
-        instance.initialize()
-    except Exception as e:
-        # If an exception occurs, make sure to clean up the skill
-        instance.default_shutdown()
-        raise e
-    skill["instance"] = instance
-    modified = 0
-    if skill['instance'] is not None:
-        bus.emit(Message('mycroft.skills.loaded', {'path': skill_path, 'id': skill['id'], 'name': skill['instance'].name, 'modified': modified}))
-        return True
-    else:
-         bus.emit(Message('mycroft.skills.loading_failure', {'path': skill_path, 'id': skill['id']}))
-    return False
 
 def check_connection():
     """
@@ -360,10 +303,6 @@ def check_connection():
         thread.daemon = True
         thread.start()
 
-
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + " I heard %s", data.data)
-
 def check_working(message):
     if message is not None:
         print('do somethingggg')
@@ -376,12 +315,9 @@ def initialise_response_server(message):
     get_response_server = GetResponseServer(manager=skill_manager)
     ask_yesno_server = AskYesNoServer(manager=skill_manager)
     
-
 def listener():
     rospy.init_node('mycroft_skills')
     rospy.loginfo(rospy.get_caller_id() + " started")
-    #rospy.Subscriber("mycroft/register_node", Mycroft, mycroft_register_node)
-    #rospy.Subscriber("mycroft/response", GetResponse, handle_get_response)
     rospy.Subscriber("mycroft/utterance", String, handle_utterance)
     rospy.Subscriber("mycroft/remove_skill", String, handle_remove_skill)
     s = rospy.Service('mycroft/register_skill', MycroftService, handle_register_skill)
@@ -401,7 +337,6 @@ def listener():
     bus.on('message', create_echo_function('SKILLS'))
     # Startup will be called after the connection with the Messagebus is done
     bus.once('open', _starting_up)
-    #bus.on('mycroft.skills.loaded', check_working)
     bus.on('skill.converse.request', check_working)
 
     create_daemon(bus.run_forever)
