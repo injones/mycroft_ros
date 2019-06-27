@@ -6,6 +6,15 @@ The package makes use of the catkin_virtualenv library to run the Mycroft nodes 
 The dev_setup.sh can be used to install dependencies and configure the package for use. 
 ## Mycroft Setup
 Mycroft can be configured using either **~/.mycroft/mycroft.conf** or **/etc/mycroft/mycroft.conf**
+## Launching ROS Nodes
+To launch all Mycroft nodes run mycroft.launch which will lanch the following nodes
+* mycroft_message_bus.py
+* mycroft_tts.py
+* mycroft_skills.py
+* mycroft_stt.py
+```
+roslaunch mycroft_ros mycroft.launch
+```
 ## Topics, Services and Actions
 ### Topics
 * **mycroft/speak (std_msgs/String)** - String for Mycroft TTS to read
@@ -22,7 +31,7 @@ response
 ### Skill/Node Structure
 ROS nodes that are to be used as MycroftSkill's should be placed within their own directory with relevent 'vocab', 'dialog' and 'regex' directories to use for intents and entities
 ### Using the RosMycroftSkill
-The mycroft_ros Python module provides helper functions and classes for convenience such as the RosMycroftSkill which can be used to register a node as a MycroftSkill with the Mycroft SkillManager
+The mycroft_ros Python module provides helper functions and classes for convenience such as the RosMycroftSkill which can be used to register a node as a MycroftSkill in the Mycroft SkillManager
 ``` python
 class ExampleSkill(RosMycroftSkill):
 
