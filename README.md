@@ -9,7 +9,7 @@ Mycroft can be configured using either **~/.mycroft/mycroft.conf** or **/etc/myc
 ## Topics, Services and Actions
 ### Topics
 * **mycroft/speak (std_msgs/String)** - String for Mycroft TTS to read
-* **mycroft/utterance (std_msgs/String)** - String to pass to the intent service
+* **mycroft/utterance (std_msgs/String)** - String to pass to the intent service of Mycroft
 * **mycroft/speech (mycroft_ros/Speech)** - List of Strings received from Mycroft STT
 * **mycroft/remove_skill (std_msgs/String)** - Path of skill to remove from SkillManager as a String
 ### Services
@@ -22,7 +22,7 @@ response
 ### Skill/Node Structure
 ROS nodes that are to be used as MycroftSkill's should be placed within their own directory with relevent 'vocab', 'dialog' and 'regex' directories to use for intents and entities
 ### Using the RosMycroftSkill
-The mycroft_ros Python module provides helper functions and classes for convenience such as the RosMycroftSkill which can be used to register nodes as a MycroftSkill
+The mycroft_ros Python module provides helper functions and classes for convenience such as the RosMycroftSkill which can be used to register a node as a MycroftSkill with the Mycroft SkillManager
 ``` python
 class ExampleSkill(RosMycroftSkill):
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
 ```
 ## TODO
 * add context to Skills
-* add speak_dialog
-* add Skill events / repeating events
+* add speak_dialog to Skills
+* add events / repeating events to Skills
 * error handling for skills
