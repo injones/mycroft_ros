@@ -32,5 +32,7 @@ class ExampleSkill(RosMycroftSkill):
 
 if __name__ == "__main__":
     rospy.init_node('mycroft_skill_test')
-    ExampleSkill()
+    example = ExampleSkill()
     rospy.spin()
+    rospy.on_shutdown(example.shutdown)
+

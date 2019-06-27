@@ -126,6 +126,7 @@ class RosMycroftSkill:
         self.topic = "mycroft/{}".format(self.id)
         self.response_client = actionlib.SimpleActionClient('get_response', GetResponseAction)
         self.ask_yesno_client = actionlib.SimpleActionClient('ask_yesno', GetResponseAction)
+        self.remove_skill = rospy.Publisher('mycroft/remove_skill', String, queue_size=10)
     
     def register_intent(self, intent_parser, callback):
 
@@ -181,3 +182,6 @@ class RosMycroftSkill:
         client.wait_for_result()
         result = client.get_result()
         return result.response
+
+    def shutdown(self):
+        self.remove_skill.publish(self.path)
