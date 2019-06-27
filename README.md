@@ -31,9 +31,9 @@ class ExampleSkill(RosMycroftSkill):
         self.register_intent(IntentBuilder("MycroftRos").require("mycroft").require("ros"), self.example)
         self.register_intent_file("mytest.intent", self.mytest)
         if self.initialise():
-            rospy.loginfo("created")
+            rospy.loginfo("MycroftSkill created")
         else:
-            rospy.loginfo("not created")
+            rospy.loginfo("Error creating MycroftSkill")
 
     def example(self, data):
         rospy.loginfo("MycroftRos callback")
