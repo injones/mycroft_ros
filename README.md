@@ -44,9 +44,10 @@ class ExampleSkill(RosMycroftSkill):
         rospy.loginfo("mytest callback")
 
 if __name__ == "__main__":
-    rospy.init_node('example_mycroft_ros_skill')
-    ExampleSkill()
+    rospy.init_node('mycroft_skill_test')
+    example = ExampleSkill()
     rospy.spin()
+    rospy.on_shutdown(example.shutdown)
 ```
 ## TODO
 * add context to Skills
