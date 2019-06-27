@@ -135,7 +135,6 @@ catkin_generate_virtualenv(
   EXTRA_PIP_ARGS
     --no-binary=:all:
     -vvv
-    -r /home/vagrant/dev/catkin_ws/src/mycroft_ros/requirements.txt
 )
 
 

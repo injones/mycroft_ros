@@ -9,7 +9,7 @@ from mycroft_ros.helpers import RosMycroftSkill, IntentBuilder
 class ExampleSkill(RosMycroftSkill):
 
     def __init__(self):
-        super(ExampleSkill, self).__init__("/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/tester")
+        super(ExampleSkill, self).__init__("/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/example")
         self.register_intent(IntentBuilder("MycroftRos").require("mycroft").require("ros"), self.example)
         self.register_intent_file("mytest.intent", self.mytest)
         self.register_intent_file("random.lol.intent", self.random)

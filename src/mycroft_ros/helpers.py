@@ -3,6 +3,7 @@ from mycroft_ros.msg import *
 from mycroft_ros.srv import *
 from std_msgs.msg import String
 import actionlib
+from os.path import basename
 
 response_client = None
 ask_yesno_client = None
@@ -138,7 +139,8 @@ class RosMycroftSkill:
         self.intents.append(intent_parser)
 
     def register_intent_file(self, intent_file, callback):
-        self.registered_intents[intent_file] = callback
+        name = self.id + ":" + intent_file
+        self.registered_intents[name] = callback
         self.intent_files.append(intent_file)
 
     def register_entity_file(self, entity_file):
@@ -158,7 +160,6 @@ class RosMycroftSkill:
             rospy.loginfo("Service call failed")
 
     def _handle_intent(self, response):
-        print(response.intent_name)
         intent_func = self.registered_intents.get(response.intent_name, None)
         if intent_func is not None:
             intent_func(response)

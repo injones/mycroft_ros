@@ -6,7 +6,7 @@ from std_msgs.msg import String
 import actionlib
 from mycroft_ros.helpers import *
 
-path = "/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/tester"
+path = "/home/vagrant/dev/catkin_ws/src/mycroft_ros/scripts/example"
 
 def mycroft_ros_callback(message):
     print('hello')
@@ -16,9 +16,9 @@ def mycroft_ros_callback(message):
 def main():
     rospy.init_node('mycroft_skill_test')
     rospy.loginfo(rospy.get_caller_id() + " started")
-    manager = IntentManager().register_callback('testerMycroftRos', mycroft_ros_callback) \
-       .register_callback('testermytest', mycroft_ros_callback)
-    rospy.Subscriber('mycroft/tester', IntentResponse, manager.handle_intent)
+    manager = IntentManager().register_callback('exampleMycroftRos', mycroft_ros_callback) \
+       .register_callback('examplemytest', mycroft_ros_callback)
+    rospy.Subscriber('mycroft/example', IntentResponse, manager.handle_intent)
     my_intent = IntentBuilder("MycroftRos").require("mycroft").require("ros").build()
     initialised = SkillBuilder(path).intent(my_intent).intent_file("mytest.intent") \
     .intent_file("random.lol.intent").entity("thing.entity").buildAndRegister()
