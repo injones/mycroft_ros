@@ -51,6 +51,7 @@ class ExampleSkill(RosMycroftSkill):
 
     def mytest(self, data):
         rospy.loginfo("mytest callback")
+        rospy.loginfo("testentity: " + data.entities.get("testentity", ""))
 
 if __name__ == "__main__":
     rospy.init_node('mycroft_skill_test')
