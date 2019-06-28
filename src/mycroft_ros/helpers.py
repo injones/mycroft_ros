@@ -161,6 +161,10 @@ class RosMycroftSkill:
             rospy.loginfo("Service call failed")
 
     def _handle_intent(self, response):
+        if len(response.entities) > 0:
+            response.entities = dict([(entity.entity, entity.value) for entity in response.entities])
+        else:
+            response.entities = {}
         intent_func = self.registered_intents.get(response.intent_name, None)
         if intent_func is not None:
             intent_func(response)

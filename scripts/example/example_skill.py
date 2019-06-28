@@ -26,6 +26,7 @@ class ExampleSkill(RosMycroftSkill):
 
     def mytest(self, data):
         rospy.loginfo("mytest callback")
+        rospy.loginfo("testentity: " + data.entities.get("testentity", ""))
 
     def random(self, data):
         rospy.loginfo("random.lol.intent callback")
