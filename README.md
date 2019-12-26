@@ -3,7 +3,40 @@ This package provides capability to run the Text-To-Speech, Speech-To-Text and S
 
 The package makes use of the catkin_virtualenv library to run the Mycroft nodes within a seperate Python virtual environment
 ## Installation
-The dev_setup.sh can be used to install dependencies and configure the package for use. 
+1. Install Python virtualenvironment
+```
+sudo apt install python3-venv
+```
+2. Install packaging using pip
+```
+python -m pip install packaging --user
+```
+3. Clone catkin_virtualenv into your workspace 
+```
+cd workspace/src
+git clone https://github.com/locusrobotics/catkin_virtualenv.git
+```
+4. If you're using Python 3 you will need to edit the `catkin_virtualenv/catkin_virtualenv/scripts/global_requirements` file of the catkin_virtualenv package by changing the line ```import Queue as Queue``` at the top of the file to ```from queue import Queue```
+
+5. Install catkin_virtualenv using pip.
+```
+cd workspace/src/catkin_virtualenv/catkin_virtualenv/
+python setup.py install
+```
+6. Install catkin_virtualenv
+```
+cd workspace
+catkin_make install --only-pkg-with-deps catkin_virtualenv
+```
+7. Run the dev_setup.sh
+```
+./workspace/src/mycroft_ros/dev.setup.sh
+```
+8. Build mycroft_ros
+```
+catkin_make --only-pkg-with-deps mycroft_ros
+```
+
 ## Mycroft Setup
 Mycroft can be configured using either **~/.mycroft/mycroft.conf** or **/etc/mycroft/mycroft.conf**
 ## Launching ROS Nodes
