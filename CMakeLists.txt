@@ -124,17 +124,17 @@ catkin_package(
 )
 
 catkin_generate_virtualenv(
-  PYTHON_VERSION 3.7
+  PYTHON_VERSION 3.5
   # Choose not to use underlying system packages. This excludes any python packages installed by apt or system-pip from the environment.
-  USE_SYSTEM_PACKAGES TRUE  # Default TRUE
+  USE_SYSTEM_PACKAGES FALSE
 
   # Disable including pip requirements from catkin dependencies of this package.
   ISOLATE_REQUIREMENTS TRUE  # Default FALSE
 
   # Provide extra arguments to the underlying pip invocation
   EXTRA_PIP_ARGS
-    --no-binary=:all:
     -vvv
+    --no-cache-dir
 )
 
 
