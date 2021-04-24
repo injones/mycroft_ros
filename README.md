@@ -15,6 +15,8 @@ python -m pip install packaging --user
 ```
 cd workspace/src
 git clone https://github.com/locusrobotics/catkin_virtualenv.git
+cd catkin_virtualenv
+git checkout 0.5.2
 ```
 4. If you're using Python 3 you will need to edit the `catkin_virtualenv/catkin_virtualenv/scripts/global_requirements` file of the catkin_virtualenv package by changing the line ```import Queue as Queue``` at the top of the file to ```from queue import Queue```
 
